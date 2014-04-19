@@ -21,6 +21,8 @@
 */
 /*
   Modified record:
+  2014.4.19 by Tony DiCola (tony@tonydicola.com)
+    Add Leonardo/Yun (ATMega32U4) support.
   2012.3.27 by Frankie.Chu
     Add funtion:setDisplayDirect.
     Add more conditional statements in funtions,fillRectangle,drawChar,drawString 
@@ -47,6 +49,22 @@ void TFT::pushData(unsigned char data)
 
 #ifdef MAPLE
 #endif
+
+#ifdef __AVR_ATmega32U4__
+    // Write data bit 0 to digital 2 (PORTD bit 1)
+    // Write data bit 1 to digital 3 (PORTD bit 0)
+    // Write data bit 2 to digital 4 (PORTD bit 4)
+    // Write data bit 3 to digital 5 (PORTC bit 6)
+    // Write data bit 4 to digital 6 (PORTD bit 7)
+    // Write data bit 5 to digital 7 (PORTE bit 6)
+    // Write data bit 6 to digital 8 (PORTB bit 4)
+    // Write data bit 7 to digital 9 (PORTB bit 5)
+    unsigned char dvalue = 0 | ((data<<1) & (1<<1)) | ((data>>1) & (1)) | ((data<<2) & (1<<4)) | ((data<<3) & (1<<7));
+    PORTD |= dvalue;
+    PORTC |= ((data<<3) & (1<<6));
+    PORTE |= ((data<<1) & (1<<6));
+    PORTB |= ((data>>2) & (0x30));
+#endif 
 }
 
 unsigned char TFT::getData(void)
@@ -490,6 +508,13 @@ void TFT::all_pin_input(void)
 
 #endif
 
+#ifdef __AVR_ATmega32U4__
+    DDRD &=~ 0x93;
+    DDRC &=~ 0x40;
+    DDRE &=~ 0x40;
+    DDRB &=~ 0x30;
+#endif
+
 }
 
 void TFT::all_pin_output(void)
@@ -508,6 +533,13 @@ void TFT::all_pin_output(void)
 #ifdef MAPLE
 
 #endif
+
+#ifdef __AVR_ATmega32U4__
+    DDRD |= 0x93;
+    DDRC |= 0x40;
+    DDRE |= 0x40;
+    DDRB |= 0x30;
+#endif
 }
 
 void TFT::all_pin_low(void)
@@ -525,6 +557,13 @@ void TFT::all_pin_low(void)
 
 #ifdef MAPLE
 
+#endif
+
+#ifdef __AVR_ATmega32U4__
+    PORTD &=~ 0x93;
+    PORTC &=~ 0x40;
+    PORTE &=~ 0x40;
+    PORTB &=~ 0x30;
 #endif
 }
 

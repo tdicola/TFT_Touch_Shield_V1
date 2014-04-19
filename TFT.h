@@ -21,6 +21,8 @@
 */
 /*
   Modified record:
+    2014.4.19 by Tony DiCola (tony@tonydicola.com)
+    Add Leonardo/Yun (ATMega32U4) support.
     2012.3.27 by Frankie.Chu
     Add the macro definitions,public funtion and private variable for the char display direction.
 */
@@ -30,7 +32,9 @@
 #ifndef TFT_h
 #define TFT_h
 
-#define SEEEDUINO
+#ifndef __AVR_ATmega32U4__
+  #define SEEEDUINO
+#endif
 
 //Basic Colors
 #define RED		0xf800
@@ -137,6 +141,48 @@
 
 #ifdef MAPLE
  // not yet implemented
+#endif
+
+#ifdef __AVR_ATmega32U4__
+
+//========================================
+#define DDR_CS      DDRB
+#define PORT_CS     PORTB
+#define CS_BIT      0x40
+#define CS_OUTPUT   {DDR_CS|=CS_BIT;}
+#define CS_HIGH     {PORT_CS|=CS_BIT;}
+#define CS_LOW      {PORT_CS&=~CS_BIT;}
+
+//-----------------------------------------
+
+#define DDR_RS      DDRB
+#define PORT_RS     PORTB
+#define RS_BIT      0x80
+#define RS_OUTPUT   {DDR_RS|=RS_BIT;}
+#define RS_HIGH     {PORT_RS|=RS_BIT;}
+#define RS_LOW      {PORT_RS&=~RS_BIT;}
+
+//-----------------------------------------
+
+#define DDR_WR      DDRD
+#define PORT_WR     PORTD
+#define WR_BIT      0x40
+#define WR_OUTPUT   {DDR_WR|=WR_BIT;}
+#define WR_HIGH     {PORT_WR|=WR_BIT;}
+#define WR_LOW      {PORT_WR&=~WR_BIT;}
+#define WR_RISING   {PORT_WR|=WR_BIT;PORT_WR&=~WR_BIT;}
+
+//-----------------------------------------
+
+#define DDR_RD      DDRC
+#define PORT_RD     PORTC
+#define RD_BIT      0x80
+#define RD_OUTPUT   {DDR_RD|=RD_BIT;}
+#define RD_HIGH     {PORT_RD|=RD_BIT;}
+#define RD_LOW      {PORT_RD&=~RD_BIT;}
+#define RD_RISING   {PORT_RD|=RD_BIT;PORT_RD&=~RD_BIT;}
+//========================================
+
 #endif
 
 /**Macro definitions for char display direction**/
