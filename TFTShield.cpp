@@ -28,7 +28,7 @@
     Add more conditional statements in funtions,fillRectangle,drawChar,drawString 
     to deal with different directions displaying.
 */
-#include "TFT.h" 
+#include "TFTShield.h" 
 
 void TFT::pushData(unsigned char data)
 {
