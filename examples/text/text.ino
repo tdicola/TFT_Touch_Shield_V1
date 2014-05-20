@@ -15,7 +15,7 @@
 
 #include <stdint.h>
 #include <TouchScreen.h> 
-#include <TFT.h>
+#include <TFTShield.h>
 
 #ifdef SEEEDUINO
   #define YP A2   // must be an analog pin, use "An" notation!
