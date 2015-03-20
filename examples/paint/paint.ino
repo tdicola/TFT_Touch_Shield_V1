@@ -77,7 +77,7 @@ void loop()
 {
 
     // a point object holds x y and z coordinates.
-    Point p = ts.getPoint();
+    TSPoint p = ts.getPoint();
 
     //map the ADC value read to into pixel co-ordinates
 
